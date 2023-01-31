@@ -1,0 +1,113 @@
+﻿@using System.Security.Claims;
+@{
+    var userId = User.FindFirst(ClaimTypes.Name);
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewData["Title"] - SynergyHRMS</title>
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="~/assets/stylesheets/theme.min.css" data-skin="default">
+    <link rel="stylesheet" href="~/assets/stylesheets/theme-dark.min.css" data-skin="dark">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" href="~/css/site.css">
+    <script>
+        var skin = localStorage.getItem('skin') || 'default';
+        var disabledSkinStylesheet = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
+        disabledSkinStylesheet.setAttribute('rel', '');
+        disabledSkinStylesheet.setAttribute('disabled', true);
+    </script>
+</head>
+<body>
+    <div class="app">
+        <header class="app-header app-header-dark">
+            <div class="top-bar">
+                <div class="top-bar-brand">
+                    <button class="hamburger hamburger-squeeze mr-2" type="button" data-toggle="aside-menu" aria-label="toggle aside menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button> <!-- /toggle aside menu -->
+                    <a asp-controller="home" asp-action="index">
+                        LOGO
+                    </a>
+                </div>
+                <div class="top-bar-list">
+                    <div class="top-bar-item px-2 d-md-none d-lg-none d-xl-none">
+                        <button class="hamburger hamburger-squeeze" type="button" data-toggle="aside" aria-label="toggle menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button> <!-- /toggle menu -->
+                    </div>
+                    <div class="top-bar-item top-bar-item-full">
+                        <form class="top-bar-search">
+                            <div class="input-group input-group-search dropdown">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
+                                </div><input type="text" class="form-control" data-toggle="dropdown" aria-label="Search" placeholder="Search"> <!-- .dropdown-menu -->
+
+                            </div>
+                        </form>
+                    </div>
+                    @*@await Component.InvokeAsync("UserProfile")*@
+                </div>
+            </div>
+        </header>
+        @await Component.InvokeAsync("Menu")
+        <main class="app-main">
+            <div class="wrapper">
+                <div class="page">
+                    <div class="page-inner">
+                        <div class="page-section">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="app-footer">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a class="text-muted" href="#">Support</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="text-muted" href="#">Help Center</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="text-muted" asp-action="Privacy" asp-controller="Home">Privacy</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="text-muted" href="#">Terms of Service</a>
+                    </li>
+                </ul>
+                <div class="copyright"> Copyright  &copy;@DateTime.Now.Year. All right reserved. </div>
+            </footer>
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/assets/vendor/popper.js/umd/popper.min.js"></script>
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/assets/vendor/menu/js/menu.min.js"></script>
+    <script src="~/assets/vendor/scrollbar/scrollbar.min.js"></script>
+
+    <script src="~/assets/javascript/theme.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116692175-1"></script>
+
+    <script>
+        $('.has-grand-child > a').on('click', function(){
+          $(this).parent().siblings().removeClass('has-open');
+        });
+        var url=window.location;
+        $('ul.menu li a').filter(function () {
+            return this.href == url;
+        }).parentsUntil().addClass('has-open');
+         $('ul.menu li a').filter(function () {
+            return this.href == url;
+        }).parent().addClass('has-active');
+        $('ul.menu li a').on('click', function(){
+          $(this).parent().siblings().removeClass('has-open');
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

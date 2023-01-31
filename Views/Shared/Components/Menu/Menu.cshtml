@@ -1,0 +1,89 @@
+﻿@model IEnumerable<HRMSApp.Models.Menu>
+
+<aside class="app-aside app-aside-expand-md app-aside-light">
+    <div class="aside-content">
+        <header class="aside-header d-block d-md-none">
+            <button class="btn-account" type="button" data-toggle="collapse" data-target="#dropdown-aside">
+                <span class="user-avatar user-avatar-lg"><img src="#" alt=""></span> 
+                <span class="account-icon"><span class="fa fa-caret-down fa-lg"></span></span> 
+                <span class="account-summary"><span class="account-name">Beni Arisandi</span> 
+                <span class="account-description">Marketing Manager</span></span></button> <!-- /.btn-account -->
+            <div id="dropdown-aside" class="dropdown-aside collapse">
+                <div class="pb-3">
+                    <a class="dropdown-item" href="user-profile.html">
+                        <span class="dropdown-icon oi oi-person"></span> Profile</a> 
+                        <a class="dropdown-item" href="auth-signin-v1.html">
+                            <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Help Center</a> 
+                    <a class="dropdown-item" href="#">Ask Forum</a> 
+                    <a class="dropdown-item" href="#">Keyboard Shortcuts</a>
+                </div>
+            </div>
+        </header>
+        <div class="aside-menu overflow-hidden">
+            <nav id="stacked-menu" class="stacked-menu">
+                <ul class="menu">
+                    <li class="menu-item ">
+                        <a asp-action="Index" asp-controller="Home" class="menu-link">
+                            <span class="menu-icon fas fa-home"></span> 
+                            <span class="menu-text  pl-1">Dashboard</span></a>
+                    </li>
+                    @foreach (var menu in Model?.Where(s => s.ParentId == 0).GroupBy(Obj => new { Obj.MenuId }).Distinct().ToList()!)
+                    {
+                        var hasChild = (menu.FirstOrDefault()!.HasChild == true) ? "has-child" : "";
+                        <li class="menu-item @hasChild">
+                            <a asp-area="@menu.FirstOrDefault()!.AreaName" asp-controller="@menu.FirstOrDefault()!.ControllerName" asp-action="@menu.FirstOrDefault()!.ActionName" class="menu-link">
+                                <span class="menu-icon">
+                                    <i class="@menu.FirstOrDefault()!.Icon"></i>
+                                </span>
+                                <span class="menu-text pl-1">@menu.FirstOrDefault()!.DisplayName</span>
+                            </a> 
+                            <!-- child menu -->
+                            <ul class="menu">
+                                @foreach (var subMenu in (Model.Where(s => s.ParentId == menu.FirstOrDefault()!.MenuId).ToList()))
+                                {
+                                    var subHasChild = subMenu.HasChild == true ? "has-child" : "";
+                                    @if ((Model.Where(s => s.ParentId == subMenu.MenuId).ToList()).Count() > 0)
+                                    {
+                                        <li class="menu-item @subHasChild has-grand-child ">
+                                            <a asp-area="@menu.FirstOrDefault()!.AreaName" asp-controller="@menu.FirstOrDefault()!.ControllerName" asp-action="@menu.FirstOrDefault()!.ActionName" class="menu-link">
+                                                <span class="menu-icon"></span>
+                                                <span class="menu-text">@subMenu.DisplayName </span>
+                                            </a> 
+                                            <!-- child menu -->
+                                            <ul class="menu">
+                                                @foreach (var subSubMenu in (Model.Where(s => s.ParentId == subMenu.MenuId).ToList()))
+                                                {
+                                                    <li class="menu-item">
+                                                        <a asp-area="@menu.FirstOrDefault()!.AreaName" asp-controller="@menu.FirstOrDefault()!.ControllerName" asp-action="@menu.FirstOrDefault()!.ActionName" class="menu-link">
+                                                            <span class="menu-icon"></span>
+                                                        <span class="menu-text">@subSubMenu.DisplayName</span>
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="menu-item @subHasChild has-grand-child ">
+                                            <a asp-area="@menu.FirstOrDefault()!.AreaName" asp-controller="@menu.FirstOrDefault()!.ControllerName" asp-action="@menu.FirstOrDefault()!.ActionName" class="menu-link">
+                                                <span class="menu-icon"></span> 
+                                                <span class="menu-text">@subMenu.DisplayName </span> 
+                                            </a> 
+                                            <!-- child menu -->
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+        <footer class="aside-footer border-top p-2">
+            <button class="btn btn-light btn-block text-primary" data-toggle="skin"><span class="d-compact-menu-none">Night mode</span> <i class="fas fa-moon ml-1"></i></button>
+        </footer>
+    </div>
+</aside>
